@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Interés Compuesto</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; background-color: #4437c3; }
+        .container { background: #978fe9; padding: 20px; margin: 20px auto; border-radius: 10px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); width: 90%; }
+        .input-container { background: #e3f2fd; padding: 15px; border-radius: 10px; margin-bottom: 20px; }
+        .output-container { background: #c8e6c9; padding: 15px; border-radius: 10px; }
+        input { margin: 5px; padding: 5px; text-align: right; }
+        table { margin: 20px auto; border-collapse: collapse; width: 80%; background: white; }
+        th, td { border: 1px solid black; padding: 10px; text-align: right; }
+        th { background: #90caf9; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="input-container">
+            <h2>Calculadora de Interés Compuesto</h2>
+            <label for="capital">Capital Inicial:</label>
+            <input type="text" id="capital" placeholder="Ingrese el capital" required oninput="formatearNumero(this)">
+            <br>
+            <label for="tna">TNA (%):</label>
+            <input type="text" id="tna" placeholder="Ingrese la TNA" required oninput="formatearNumero(this)">
+            <br>
+            <button onclick="calcularInteres()">Calcular</button>
+        </div>
+        <div class="output-container">
+            <h3>Resultados</h3>
+            <p id="tem"></p>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Mes</th>
+                    <th>Capital Compuesto</th>
+                    <th>Capital Simple</th>
+                    <th>Diferencia</th>
+                </tr>
+            </thead>
+            <tbody id="resultado">
+                <tr><td colspan="4">Ingrese datos y presione calcular</td></tr>
+            </tbody>
+        </table>
+    </div>
+    <script>
+        function formatearNumero(input) {
+            let valor = input.value.replace(/[^0-9]/g, "");
+            if (valor) {
+                input.value = parseInt(valor, 10).toLocaleString("es-ES");
+            }
+        }
+
+        function obtenerValorNumerico(id) {
+            let valor = document.getElementById(id).value.replace(/\./g, "").replace(/,/g, ".");
+            return parseFloat(valor) || 0;
+        }
+
+        function calcularInteres() {
+            let capitalInicial = obtenerValorNumerico("capital");
+            let tna = obtenerValorNumerico("tna");
+            if (capitalInicial === 0 || tna === 0) {
+                alert("Por favor, ingrese valores válidos.");
+                return;
+            }
+            let tem = tna / 12 / 100;
+          	let teml = tna / 12;
+            document.getElementById("tem").innerText = `Tasa Efectiva Mensual (%): ${teml.toFixed(2)}`;
+            let tbody = document.getElementById("resultado");
+            tbody.innerHTML = "";
+            for (let n = 1; n <= 12; n++) {
+                let capitalCompuesto = capitalInicial * Math.pow(1 + tem, n);
+                let capitalSimple = capitalInicial * (1 + tem * n);
+                let diferencia = capitalCompuesto - capitalSimple;
+                let fila = `<tr>
+                    <td>${n}</td>
+                    <td>${capitalCompuesto.toLocaleString("es-ES", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</td>
+                    <td>${capitalSimple.toLocaleString("es-ES", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</td>
+                    <td>${diferencia.toLocaleString("es-ES", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</td>
+                </tr>`;
+                tbody.innerHTML += fila;
+            }
+        }
+    </script>
+</body>
+</html>
