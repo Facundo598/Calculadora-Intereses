@@ -90,15 +90,15 @@
         <div class="input-container">
             <div class="input-group">
                 <label for="capital">Capital Inicial:</label>
-                <input type="text" id="capital" placeholder="Ingrese el capital" required>
+                <input type="text" id="capital" placeholder="Ingrese el capital" required oninput="formatearNumero(this)">
             </div>
             <div class="input-group">
                 <label for="tna">TNA (%):</label>
-                <input type="text" id="tna" placeholder="Ingrese la TNA" required>
+                <input type="text" id="tna" placeholder="Ingrese la TNA" required oninput="formatearNumero(this)">
             </div>
             <div class="input-group">
                 <label for="capitalAdicional">Capital Adicional:</label>
-                <input type="text" id="capitalAdicional" placeholder="Ingrese el capital adicional" required>
+                <input type="text" id="capitalAdicional" placeholder="Ingrese el capital adicional" required oninput="formatearNumero(this)">
             </div>
             <button onclick="calcularInteres()">Calcular</button>
         </div>
@@ -123,8 +123,16 @@
         <canvas id="grafico"></canvas>
     </div>
     <script>
+      	// Formatea el número en el input con separadores de miles
+        function formatearNumero(input) {
+            let valor = input.value.replace(/[^0-9]/g, "");
+            if (valor) {
+                input.value = parseInt(valor, 10).toLocaleString("es-ES");
+            }
+        }
+        // Obtiene el valor numérico eliminando separadores
         function obtenerValorNumerico(id) {
-            let valor = document.getElementById(id).value.replace(/\./g, "").replace(/,/g, ".");
+            let valor = document.getElementById(id).value.replace(/\./g, "").replace(/,/g, "");
             return parseFloat(valor) || 0;
         }
 
